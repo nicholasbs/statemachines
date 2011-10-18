@@ -8,7 +8,7 @@
 (define (stack-peek stack)
   (if (null? stack) '() (car stack)))
 
-; A pushdown automaton is:
+; A pushdown automaton is a finite state machine with a stack
 ;  start-state       -- the start state
 ;  accept-state      -- a list of accept states
 ;  transitions       -- maps from a (state, input, stack) pair to a (state, stack) pair
@@ -36,7 +36,7 @@
   (if (list? (cadr next))
       (caadr next)
       (cadr next)))
-(define (get-next-arg next)
+(define (get-next-item next)
   (if (list? (cadr next))
       (cadadr next)))
 
@@ -48,7 +48,7 @@
             '#f ; bad input, stop and reject
             (let ((next-state (car next))
                   (next-action (get-next-action next)) ; push, pop or noop
-                  (next-item (get-next-arg next))) ; next item to push (or nil if pop or noop)
+                  (next-item (get-next-item next))) ; next item to push (or nil if pop or noop)
               (let ((updated-stack (cond
                                      ((equal? next-action 'push)
                                       (stack-push next-item stack))

@@ -16,27 +16,27 @@
   (list start-state accept-states transitions))
 
 ; Convenience functions
-(define (get-start-state pda) (car pda))
-(define (get-accept-states pda) (cadr pda))
-(define (get-transitions pda) (caddr pda))
+(define pda-start-state car)
+(define pda-accept-states cadr)
+(define pda-transitions caddr)
 
 ; Takes a pda, a state, an input, and the top element on the stack and returns the next state
 (define (apply-transition state input stack-top pda)
-  (let ((result (assoc (list state input stack-top) (get-transitions pda))))
+  (let ((result (assoc (list state input stack-top) (pda-transitions pda))))
     (if result 
         (cadr result)
         nil)))
 
 ; Returns #t if state is an accept state of pda and #f otherwise.
 (define (accept-state? state pda)
-  (if (member state (get-accept-states pda)) '#t '#f))
+  (if (member state (pda-accept-states pda)) '#t '#f))
 
 ;refactor -- bah
-(define (get-next-action next)
+(define (pda-next-action next)
   (if (list? (cadr next))
       (caadr next)
       (cadr next)))
-(define (get-next-item next)
+(define (pda-next-item next)
   (if (list? (cadr next))
       (cadadr next)))
 
@@ -47,8 +47,8 @@
         (if (null? next)
             '#f ; bad input, stop and reject
             (let ((next-state (car next))
-                  (next-action (get-next-action next)) ; push, pop or noop
-                  (next-item (get-next-item next))) ; next item to push (or nil if pop or noop)
+                  (next-action (pda-next-action next)) ; push, pop or noop
+                  (next-item (pda-next-item next))) ; next item to push (or nil if pop or noop)
               (let ((updated-stack (cond
                                      ((equal? next-action 'push)
                                       (stack-push next-item stack))
@@ -60,7 +60,7 @@
                          
 ; Run pda on input
 (define (run-pda input pda)
-  (run-pda-inner input '() (get-start-state pda) pda))
+  (run-pda-inner input '() (pda-start-state pda) pda))
 
 
 ; E.g., a pda that accepts strings with an equal number of a's and b's

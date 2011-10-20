@@ -5,12 +5,18 @@
 ;  accept-state      -- a list of accept states
 ;  transitions       -- maps from a (state, input) pair to a state
 (define (make-dfa start-state accept-states transitions)
-  (list start-state accept-states transitions))
+  (list 'dfa start-state accept-states transitions))
+
+(define (dfa? dfa)
+  (and (not (null? dfa)) (equal? (car dfa) 'dfa)))
 
 ; Convenience functions
-(define dfa-start-state car)
-(define dfa-accept-states cadr)
-(define dfa-transitions caddr)
+(define (dfa-start-state dfa) 
+  (if (dfa? dfa) (cadr dfa) (error "not a DFA")))
+(define (dfa-accept-states dfa)
+  (if (dfa? dfa) (caddr dfa) (error "not a DFA")))
+(define (dfa-transitions dfa)
+  (if (dfa? dfa) (cadddr dfa) (error "not a DFA")))
 
 ; Takes a dfa, a state, and an input, and returns the next state
 (define (apply-transition state input dfa)

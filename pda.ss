@@ -13,12 +13,18 @@
 ;  accept-state      -- a list of accept states
 ;  transitions       -- maps from a (state, input, stack) pair to a (state, stack) pair
 (define (make-pda start-state accept-states transitions)
-  (list start-state accept-states transitions))
+  (list 'pda start-state accept-states transitions))
+
+(define (pda? pda)
+  (and (not (null? pda)) (equal? (car pda) 'pda)))
 
 ; Convenience functions
-(define pda-start-state car)
-(define pda-accept-states cadr)
-(define pda-transitions caddr)
+(define (pda-start-state pda)
+  (if (pda? pda) (cadr pda)))
+(define (pda-accept-states pda)
+  (if (pda? pda) (caddr pda)))
+(define (pda-transitions pda)
+  (if (pda? pda) (cadddr pda)))
 
 ; Takes a pda, a state, an input, and the top element on the stack and returns the next state
 (define (apply-transition state input stack-top pda)

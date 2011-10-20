@@ -35,7 +35,7 @@
 
 ; Returns #t if state is an accept state of pda and #f otherwise.
 (define (accept-state? state pda)
-  (if (member state (pda-accept-states pda)) '#t '#f))
+  (not (null? (member state (pda-accept-states pda)))))
 
 ;refactor -- bah
 (define (pda-next-action next)

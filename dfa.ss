@@ -25,7 +25,7 @@
 
 ; Returns #t if state is an accept state of dfa and #f otherwise.
 (define (accept-state? state dfa)
-  (if (member state (dfa-accept-states dfa)) '#t '#f))
+  (not (null? (member state (dfa-accept-states dfa)))))
 
 ; Run dfa from current-state until input is exhausted
 (define (run-dfa-inner input current-state dfa)
